@@ -148,39 +148,49 @@ class SQL {
     // if (column.default) {
     //   defaultValue = column.default;
     // }
-    return addColumn[this.adaptor](
+    addColumn[this.adaptor](
       this.database,
       table,
       this.setSchema(column, "addColumn"),
       column
-    );
+    )
+      .then(response => logs.info(response, this.isVerbose))
+      .catch(err => logs.error({ err }));
   }
 
   renameColumn(table, params) {
     if (this.adaptor === "sqlite3") {
-      return this.customSQL("SELECT * FROM sqlite_master WHERE type='table'", {
+      this.customSQL("SELECT * FROM sqlite_master WHERE type='table'", {
         action: "all"
       })
         .then(res => {
-          return renameColumn[this.adaptor](this.database, table, params, res);
+          renameColumn[this.adaptor](this.database, table, params, res)
+            .then(response => logs.info(response, this.isVerbose))
+            .catch(err => logs.error({ err }));
         })
-        .catch(err => console.error(err));
+        .catch(err => logs.error({ err }));
     } else {
-      return renameColumn[this.adaptor](this.database, table, params);
+      renameColumn[this.adaptor](this.database, table, params)
+        .then(response => logs.info(response, this.isVerbose))
+        .catch(err => logs.error({ err }));
     }
   }
 
   removeColumn(table, column) {
     if (this.adaptor === "sqlite3") {
-      return this.customSQL("SELECT * FROM sqlite_master WHERE type='table'", {
+      this.customSQL("SELECT * FROM sqlite_master WHERE type='table'", {
         action: "all"
       })
         .then(res => {
-          return removeColumn[this.adaptor](this.database, table, column, res);
+          removeColumn[this.adaptor](this.database, table, column, res)
+            .then(response => logs.info(response, this.isVerbose))
+            .catch(err => logs.error({ err }));
         })
-        .catch(err => console.error(err));
+        .catch(err => logs.error(err));
     } else {
-      return removeColumn[this.adaptor](this.database, table, column);
+      removeColumn[this.adaptor](this.database, table, column)
+        .then(response => logs.info(response, this.isVerbose))
+        .catch(err => logs.error({ err }));
     }
   }
 
@@ -188,7 +198,6 @@ class SQL {
     return dropTable[this.adaptor](this.database.connection, table)
       .then(response => {
         logs.info(response, this.isVerbose);
-        process.exit(-1);
       })
       .catch(err => logs.error(err, this.isVerbose));
   }

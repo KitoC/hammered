@@ -8,6 +8,7 @@ const postgresPlayground = async () => {
     verbose: true
   });
 
+  console.log("In crud tests");
   await postgres.connect();
   // // await postgres.dropDb();
 

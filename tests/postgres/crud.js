@@ -16,7 +16,7 @@ const postgresActions = async () => {
   await postgres.createTable("Posts", {
     title: { type: "text" },
     body: { type: "text" },
-    foobar: { type: "text", default: "DEFAULTS" }
+    foo: { type: "text", default: "DEFAULTS" }
   });
 
   const Posts = postgres.createOrm("Posts");
@@ -26,82 +26,71 @@ const postgresActions = async () => {
     body: "Blaaady blaady",
     foo: "bar"
   })
-    .then(res => console.log("\npostgres => CREATED response", res))
-    .catch(err => console.warn(err));
+    .then(res => res)
+    .catch(err => err);
 
   await Posts.create({
     title: "postgres",
-    body: ""
+    foooa: ""
   })
-    .then(res => console.log("\npostgres => CREATED response", res))
-    .catch(err => console.warn(err));
+    .then(res => res)
+    .catch(err => err);
 
   await Posts.update(1, {
     title: "postgres",
     body: "Postgres updates",
     foo: "too"
   })
-    .then(res => console.log("\npostgres => UPDATED response", res))
-    .catch(err => console.warn(err));
+    .then(res => console.log(res))
+    .catch(err => err);
 
   await Posts.update(2, {
     title: "postgres",
     body: "it even updates",
     foo: "null columns"
   })
-    .then(res => console.log("\npostgres => UPDATED response", res))
-    .catch(err => console.warn(err));
+    .then(res => console.log(res))
+    .catch(err => err);
 
   await Posts.destroy(1)
     .then(res => {
-      if (res.destroyed) {
-        console.log(`\npostgres => DESTROYED posts entry:`, res);
-      }
+      res;
     })
-    .catch(err => console.error(err));
+    .catch(err => err);
 
-  postgres
-    .addColumn("Posts", {
-      lollies: { type: "text" }
+  await Posts.destroy(2)
+    .then(res => {
+      res;
     })
-    .then(res =>
-      console.log(`\nostgres => New column added to Posts table:`, res)
-    )
-    .catch(err => console.error(err));
+    .catch(err => err);
 
-  postgres
-    .removeColumn("Posts", "title")
-    .then(res =>
-      console.log(`\npostgres => Column removed from Posts table:`, res)
-    );
+  postgres.addColumn("Posts", {
+    lollies: { type: "text" }
+  });
 
-  postgres
-    .renameColumn("Posts", { from: "body", to: "foofie" })
-    .then(res =>
-      console.log(`\npostgres => Column renamed in Posts table:`, res)
-    )
-    .catch(err => console.error(err));
+  postgres.removeColumn("Posts", "title");
+
+  postgres.renameColumn("Posts", { from: "body", to: "foofie" });
 
   await Posts.get()
     .then(data => {
-      console.log("\npostgres => FETCH ALL entries response", data.rows);
+      console.log("\npostgres => FETCH ALL entries response", data);
     })
     .catch(err => console.warn(err));
   await Posts.get({ id: 2 })
     .then(data => {
-      console.log("\npostgres => FETCH ID of 2 entries response", data.rows[0]);
+      console.log("\npostgres => FETCH ID of 2 entries response", data);
     })
     .catch(err => console.warn(err));
 
   await postgres
     .customSQL(
-      ` select column_name, data_type, column_default
-      from INFORMATION_SCHEMA.COLUMNS where table_name ='posts';`
+      `SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE'`
     )
     .then(response => {
       const dbTables = [];
-      console.log(response.rows);
-      response.rows.forEach(table => {
+      console.log(response);
+      response.forEach(table => {
         dbTables.push(table.table_name);
       });
       console.log("\npostgres => these tables in exists db", dbTables);

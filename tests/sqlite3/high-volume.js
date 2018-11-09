@@ -34,6 +34,8 @@ const highVolumeTest = async () => {
   await sqlite.connect();
   await sqlite.serialize();
 
+  sqlite.verbose();
+
   await sqlite.createTable("Posts", {
     title: { type: "text" }
   });

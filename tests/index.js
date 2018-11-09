@@ -15,7 +15,7 @@ const postgresPlayground = require("./postgres/playground.js");
 
 // highVolumePostgres();
 // constraintsPostgres();
-crudPostgres();
+// crudPostgres();
 // postgresPlayground();
 
 // console.log("blah = $130".replace(/[$][\d]*/, "$"));

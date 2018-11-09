@@ -34,9 +34,10 @@ function makeid(i) {
 
 const highVolumeTest = async () => {
   console.log("highVlume");
-  const postgres = new SQL(development.database, {
+  const postgres = new SQL(database_config.postgres.database, {
     adaptor: "postgres",
-    config: database_config.postgres
+    config: database_config.postgres,
+    verbose: true
   });
 
   await postgres.connect();
@@ -49,20 +50,19 @@ const highVolumeTest = async () => {
     })
     .catch(err => console.log(err.message));
 
+  const Posts = postgres.createOrm("Posts");
+
   for (let i = 0; i < 30; i++) {
-    await postgres
-      .create("Posts", {
-        title: makeid(i)
-      })
-      .then(res => console.log("\npostgres => CREATED response", res))
+    await Posts.create({
+      title: makeid(i)
+    })
+      .then(res => res)
       .catch(err => console.warn(err));
-    //   console.log(makeid(i));
   }
 
-  await postgres
-    .searchLike({ table: "Posts", column: "title", pattern: "a%" })
+  await Posts.get({ table: "Posts", where: "title", like: "a%" })
     .then(data => {
-      console.log("\npostgres => FETCH ALL entries response", data.rows);
+      console.log("\npostgres => FETCH ALL entries response", data);
     })
     .catch(err => console.warn(err));
 

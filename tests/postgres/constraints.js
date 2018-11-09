@@ -39,9 +39,10 @@ function getRandomIntInclusive(min, max) {
 
 const highVolumeTest = async () => {
   console.log("CONSTRAINTS");
-  const postgres = new SQL(development.database, {
+  const postgres = new SQL(database_config.postgres.database, {
     adaptor: "postgres",
-    config: database_config.postgres
+    config: database_config.postgres,
+    verbose: true
   });
 
   await postgres.connect();
@@ -49,12 +50,10 @@ const highVolumeTest = async () => {
   await postgres.dropTable("Orders");
   await postgres.dropTable("Users");
 
-  await postgres
-    .createTable("Users", {
-      name: { type: "text" },
-      age: { type: "int" }
-    })
-    .catch(err => console.log(err.message));
+  await postgres.createTable("Users", {
+    name: { type: "text" },
+    age: { type: "int" }
+  });
 
   const Users = postgres.createOrm("Users");
   const Orders = postgres.createOrm("Orders");
@@ -63,29 +62,29 @@ const highVolumeTest = async () => {
     name: "Bradley Cooper",
     age: 34
   })
-    .then(res => console.log("\npostgres => CREATED response", res))
-    .catch(err => console.warn(err));
+    .then(res => res)
+    .catch(err => err);
 
   await Users.create({
     name: "Vera Williams",
     age: 29
   })
-    .then(res => console.log("\npostgres => CREATED response", res))
-    .catch(err => console.warn(err));
+    .then(res => res)
+    .catch(err => err);
 
   await Users.create({
     name: "Serena Williams",
     age: 36
   })
-    .then(res => console.log("\npostgres => CREATED response", res))
-    .catch(err => console.warn(err));
+    .then(res => res)
+    .catch(err => err);
 
   await Users.create({
     name: "John Matthews",
     age: 47
   })
-    .then(res => console.log("\npostgres => CREATED response", res))
-    .catch(err => console.warn(err));
+    .then(res => res)
+    .catch(err => err);
 
   await postgres
     .createTable("Orders", {
@@ -101,10 +100,10 @@ const highVolumeTest = async () => {
       title: makeid(i),
       userId: getRandomIntInclusive(1, 4),
       foo: "bar",
-      baz: "rar"
+      bazz: "rar"
     })
-      .then(res => console.log("\npostgres => CREATED response", res))
-      .catch(err => console.warn(err));
+      .then(res => res)
+      .catch(err => err);
   }
 
   await Orders.get({

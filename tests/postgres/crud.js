@@ -74,12 +74,12 @@ const postgresActions = async () => {
 
   await Posts.get()
     .then(data => {
-      console.log("\npostgres => FETCH ALL entries response", data);
+      console.log("\npostgres => FETCH ALL entries response\n", data);
     })
     .catch(err => console.warn(err));
   await Posts.get({ id: 2 })
     .then(data => {
-      console.log("\npostgres => FETCH ID of 2 entries response", data);
+      console.log(data);
     })
     .catch(err => console.warn(err));
 
@@ -89,7 +89,7 @@ const postgresActions = async () => {
     )
     .then(response => {
       const dbTables = [];
-      console.log(response);
+      // console.log(response);
       response.forEach(table => {
         dbTables.push(table.table_name);
       });

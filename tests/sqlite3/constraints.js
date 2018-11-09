@@ -38,6 +38,7 @@ const highVolumeTest = async () => {
 
   await sqlite.connect();
   await sqlite.serialize();
+  await sqlite.verbose();
 
   const Users = sqlite.createOrm("Users");
   const Orders = sqlite.createOrm("Orders");
@@ -53,28 +54,28 @@ const highVolumeTest = async () => {
     name: "Bradley Cooper",
     age: 34
   })
-    .then(res => console.log("\nsqlite => CREATED response", res))
+    .then(res => res)
     .catch(err => console.warn(err));
 
   await Users.create({
     name: "Vera Williams",
     age: 29
   })
-    .then(res => console.log("\nsqlite => CREATED response", res))
+    .then(res => res)
     .catch(err => console.warn(err));
 
   await Users.create({
     name: "Serena Williams",
     age: 36
   })
-    .then(res => console.log("\nsqlite => CREATED response", res))
+    .then(res => res)
     .catch(err => console.warn(err));
 
   await Users.create({
     name: "John Matthews",
     age: 47
   })
-    .then(res => console.log("\nsqlite => CREATED response", res))
+    .then(res => res)
     .catch(err => console.warn(err));
 
   await sqlite
@@ -93,14 +94,14 @@ const highVolumeTest = async () => {
       foo: "bar",
       baz: "rar"
     })
-      .then(res => console.log("\nsqlite => CREATED response", res))
+      .then(res => res)
       .catch(err => console.warn(err));
   }
 
   await Orders.get({
-    where: "title",
-    like: "DeF%",
-    columns: "title, foo"
+    where: "userId",
+    like: "2",
+    columns: "title, foo, userid"
   })
     .then(data => {
       console.log("\nsqlite => FETCH ALL entries response", data);

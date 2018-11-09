@@ -7,6 +7,7 @@ const sqlite3Playground = async () => {
   });
 
   await sqlite.connect();
+  await sqlite.verbose();
 
   await sqlite
     .createTable("Posts", {
@@ -15,6 +16,7 @@ const sqlite3Playground = async () => {
       foo: { type: "text" }
     })
     .catch(err => console.log(err.message));
+
   await sqlite
     .createTable("Lalas", {
       title: { type: "text" },

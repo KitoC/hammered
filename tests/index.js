@@ -8,7 +8,7 @@ const highVolumePostgres = require("./postgres/high-volume.js");
 const constraintsPostgres = require("./postgres/constraints.js");
 const postgresPlayground = require("./postgres/playground.js");
 
-// crudSqlite3();
+crudSqlite3();
 // sqlite3Playground();
 // constraintsSqlite3();
 // highVolumeSqlite3();

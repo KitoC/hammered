@@ -17,16 +17,13 @@ const { setSchema, logs } = require("./lib/utils");
 const Orm = require("./lib/orm");
 
 class SQL {
-  constructor(dbName, options) {
-    // console.log(options);
-
-    this.adaptor =
-      options && options.config.adaptor ? options.config.adaptor : "sqlite3";
+  constructor({ config }) {
+    this.adaptor = config && config.adaptor ? config.adaptor : "sqlite3";
 
     this.database = {
-      name: dbName,
+      name: config.database,
       connection: null,
-      config: options && options.config ? options.config : null
+      config
     };
 
     if (this.adaptor === "sqlite3") {
@@ -41,7 +38,7 @@ class SQL {
 
     this.existingTables = [];
 
-    this.isVerbose = options.verbose || false;
+    this.isVerbose = false;
   }
 
   createOrm(table, tableSchema) {
@@ -70,7 +67,8 @@ class SQL {
   }
 
   // TODO: Maybe limit the actions to only nails and not the user's app?
-  connect() {
+  connect(callback) {
+    console.log(this.adaptor);
     switch (this.adaptor) {
       case "sqlite3":
         return connect
@@ -78,14 +76,14 @@ class SQL {
             this.adaptorInstance,
             this.database.name,
             this.database.config,
-            this.createTable,
             this.isVerbose
           )
           .then(db => {
             this.database.connection = db;
+            callback();
           })
           .catch(err => {
-            logs.error({ err, config });
+            logs.error({ err });
           });
 
       case "postgres":
@@ -97,7 +95,10 @@ class SQL {
             this.database.config,
             this.isVerbose
           )
-          .then(async response => logs.success(response, this.isVerbose))
+          .then(async response => {
+            logs.success(response, this.isVerbose);
+            callback();
+          })
           .catch(({ err, config }) => {
             logs.error({ err, config }, this.isVerbose);
           });

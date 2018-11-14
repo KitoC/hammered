@@ -3,7 +3,7 @@ const database_config = require("../../config/database_config");
 const colors = require("../../lib/utils/colors.js");
 
 const sqlite3Actions = async () => {
-  const sqlite = new SQL("zoot", {
+  const sqlite = new SQL({
     config: database_config.sqlite3
   });
 

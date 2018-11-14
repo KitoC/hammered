@@ -20,6 +20,7 @@ const database_config = {
   },
   sqlite3: {
     adaptor: "sqlite3",
+    database: "zoot-dev",
     path: process.env.SQLITE3PATH
   }
 };

@@ -63,12 +63,11 @@ class SQL {
 
   readTables() {
     // todo: make this read from database
-    console.log(this.existingTables);
+    // console.log(this.existingTables);
   }
 
   // TODO: Maybe limit the actions to only nails and not the user's app?
   connect(callback) {
-    console.log(this.adaptor);
     switch (this.adaptor) {
       case "sqlite3":
         return connect
@@ -139,13 +138,17 @@ class SQL {
 
   createTable(table, columns) {
     this.existingTables.push(table);
-    return createTable[this.adaptor](
-      this.database,
-      table,
-      this.setSchema(columns)
-    )
-      .then(response => logs.info(response, this.isVerbose))
-      .catch(err => logs.error({ err }, this.isVerbose));
+    return new Promise((resolve, reject) => {
+      createTable[this.adaptor](this.database, table, this.setSchema(columns))
+        .then(response => {
+          logs.info(response, this.isVerbose);
+          resolve(response);
+        })
+        .catch(err => {
+          logs.error({ err }, this.isVerbose);
+          reject(err);
+        });
+    });
   }
 
   addColumn(table, column) {
@@ -156,7 +159,7 @@ class SQL {
       column
     )
       .then(response => logs.info(response, this.isVerbose))
-      .catch(err => logs.error({ err }));
+      .catch(err => logs.error({ err, action: "addColumn" }));
   }
 
   renameColumn(table, params) {
@@ -187,7 +190,7 @@ class SQL {
         .then(res => {
           removeColumn[this.adaptor](this.database, table, column, res)
             .then(response => logs.info(response, this.isVerbose))
-            .catch(err => logs.error({ err }));
+            .catch(err => logs.error({ err, action: "removeColumn" }));
         })
         .catch(err => logs.error(err));
     } else {
@@ -198,11 +201,17 @@ class SQL {
   }
 
   dropTable(table) {
-    return dropTable[this.adaptor](this.database.connection, table)
-      .then(response => {
-        logs.info(response, this.isVerbose);
-      })
-      .catch(err => logs.error({ err }, this.isVerbose));
+    return new Promise((resolve, reject) => {
+      dropTable[this.adaptor](this.database.connection, table)
+        .then(response => {
+          logs.info(response, this.isVerbose);
+          resolve(response);
+        })
+        .catch(err => {
+          logs.error({ err }, this.isVerbose);
+          reject(err);
+        });
+    });
   }
 
   dropDb() {

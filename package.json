@@ -1,6 +1,6 @@
 {
   "name": "hammered-orm",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A promise based ORM supporting sqlite3, postgres and future plans to support mongoDB and mysql. ",
   "main": "index.js",
   "scripts": {

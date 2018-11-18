@@ -22,7 +22,7 @@ const sqlite3Playground = async () => {
       title: { type: "text" },
       shoes: { type: "text" },
       foo: { type: "text", default: "bar" },
-      postId: { type: "foreignKey", table: "Posts" }
+      postId: { type: "foreign_key", table: "Posts" }
     })
     .catch(err => console.log(err.message));
 
@@ -31,7 +31,7 @@ const sqlite3Playground = async () => {
     title: { type: "text" },
     body: { type: "text" },
     foo: { type: "text" },
-    postId: { type: "foreignKey" }
+    postId: { type: "foreign_key" }
   });
 
   await Lalas.checkSchema();

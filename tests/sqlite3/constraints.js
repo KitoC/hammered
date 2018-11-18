@@ -81,7 +81,7 @@ const highVolumeTest = async () => {
   await sqlite
     .createTable("Orders", {
       title: { type: "text" },
-      userId: { type: "foreignKey", table: "Users" },
+      userId: { type: "foreign_key", table: "Users" },
       foo: { type: "text" },
       baz: { type: "text" }
     })

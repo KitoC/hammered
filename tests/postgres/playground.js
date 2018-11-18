@@ -22,7 +22,7 @@ const postgresPlayground = async () => {
     title: { type: "text" },
     shoes: { type: "text" },
     foo: { type: "text", default: "bar" }
-    // postId: { type: "foreignKey", table: "Posts" }
+    // postId: { type: "foreign_key", table: "Posts" }
   });
 
   // //   sqlite.readTables();
